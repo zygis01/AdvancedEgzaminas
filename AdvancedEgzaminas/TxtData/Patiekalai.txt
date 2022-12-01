@@ -1,0 +1,10 @@
+﻿[1] Aviena
+[2] Kepsnys
+[3] Pepperoni Pica
+[4] Vistienos file
+[5] Margarita Pica
+[6] Havaju Pica
+[7] Sonkauliai
+[8] Saliami Pica
+[9] Cepelinai
+[10] Zuvies file

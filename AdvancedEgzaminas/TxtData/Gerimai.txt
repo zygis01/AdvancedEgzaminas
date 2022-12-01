@@ -1,0 +1,7 @@
+﻿[1] Coca Cola
+[2] Sprite
+[3] Fanta
+[4] Gira
+[5] RedBull
+[6] Negazuotas vanduo
+ 
