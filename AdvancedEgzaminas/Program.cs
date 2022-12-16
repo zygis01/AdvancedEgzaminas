@@ -1,58 +1,100 @@
-﻿
-using AdvancedEgzaminas.Models;
+﻿using AdvancedEgzaminas.Models;
+using AdvancedEgzaminas.Repositories;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 
-string gerimaiPath = "C:\\Users\\Zygimantas\\source\\repos\\AdvancedEgzaminas\\AdvancedEgzaminas\\TxtData\\Gerimai.txt";
-//StreamReader sr = new StreamReader(patiekalaiPath);
-//var str = sr.ReadToEnd();
+// PADARYTI ASINCHRONINISKA PROGRAMA (KOL MAISTAS GAMINAMAS)
+// ISNAUDOTI PILNAI WAITRESS KLASE, PADARYTI PAKEITIMU 
+// PILNAI UZBAIGTI CEKIU SPAUSDINIMA
+// SUKRAUTI MAISTA IR GERIMUS I TXT FAILUS
+// PADARYTI UNIT TESTUS
+// JEIGU ISEINA PANAUDOTI GENERICS
+// PANAUDOTI LOADING BARA KOL SIUNCIAMAS EMAIL
+// PANAUDOTI DAUGIAU ADVANCED PASKAITU DALYKU
+// KUO LABIAU SUMAZINTI KODA / PERPANAUDOTI KLASES/FUNKCIJAS KUR GALIMA
+// 
 
-Console.WriteLine("Pasirinkite gerima :");
-Console.WriteLine("[1] - Coca Cola\n" +
-                  "[2] - Sprite\n" +
-                  "[3] - Fanta\n" +
-                  "[4] - Gira\n" +
-                  "[5] - Redbull\n" +
-                  "[6] - Negazuotas vanduo\n" +
-                  "[7] - Nereikia");
-var read = Int32.Parse(Console.ReadLine());
 
-foreach (string line in File.ReadAllLines(gerimaiPath))
+Waitress waitress = new();
+FoodRepository foodRepo = new();
+DrinksRepository drinksRepo = new();
+
+bool startProgram = true;
+
+while (startProgram)
 {
-    if (line.Contains(read.ToString()))
+    Console.WriteLine(Restaurant.restaurantName);
+
+    Console.WriteLine("Welcome, how many people came: ?");
+    int peopleCount;
+    bool isSuccessPeopleCount = int.TryParse(Console.ReadLine(), out peopleCount);
+
+    int readTableId;
+    if (peopleCount >= 1 && peopleCount <= 4 && isSuccessPeopleCount == true)
     {
-        switch (read)
+        Console.WriteLine("Those are all of the tables that we have!");
+        Console.WriteLine();
+        waitress.ShowAllTables();
+
+        Console.WriteLine("Select the table you would like to take: ");
+        bool isSuccessReadTableId = int.TryParse(Console.ReadLine(), out readTableId);
+        Console.Clear();
+
+        if (isSuccessReadTableId == true)
         {
-            case 1:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.CocaCola}");
-                break;
-            case 2:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.Sprite}");
-                break;
-            case 3:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.Fanta}");
-                break;
-            case 4:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.Gira}");
-                break;
-            case 5:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.RedBull}");
-                break;
-            case 6:
-                Console.WriteLine(line);
-                Console.WriteLine($"Kaina - {Gerimas.NegazVanduo}");
-                break;
-            case 7:
-                Console.WriteLine("Be gerimo");
-                break;
-            default:
-                Console.WriteLine("Blogas pasirinkimas..");
-                break;
+            waitress.ReserveTable(readTableId, startProgram);
         }
+        else
+        {
+            Console.WriteLine("Wrong number.. try again!");
+            return;
+        }
+        Console.WriteLine("What would you like to order from food meniu? [x]!");
+        Console.WriteLine();
+        foodRepo.ShowFoodMeniu();
+
+        int foodOption;
+        bool isSuccessFoodOption = int.TryParse(Console.ReadLine(), out foodOption);
+        if (foodOption > 6 && isSuccessFoodOption == false)
+        {
+            Console.WriteLine("Wrong choice.. try again!");
+        }
+        if (foodOption == 0)
+        {
+            Console.WriteLine("You didnt choose any dish..");
+        }
+
+        Console.WriteLine("What would you like to order from drinks meniu? [x]!");
+        Console.WriteLine();
+        drinksRepo.ShowDrinksMeniu();
+
+        int drinkOption;
+        bool isSuccessDrinkOption = int.TryParse(Console.ReadLine(), out drinkOption);
+        if (drinkOption > 4 && drinkOption < 1 && isSuccessDrinkOption == false)
+        {
+            Console.WriteLine("Wrong choice.. try again!");
+            
+        }
+        Console.WriteLine("Whats your name Mr/Mis? ");
+        string readName = Console.ReadLine();
+
+        var chosenFood = foodRepo.GetFoodById(foodOption);
+        var chosenDrink = drinksRepo.GetDrinkById(drinkOption);
+
+        waitress.RegisterOrder(readName, readTableId, chosenFood, chosenDrink);
+        waitress.SendReceiptToEmail(readTableId);
+    }
+    else if (peopleCount < 1 || peopleCount > 4)
+    {
+        Console.WriteLine("Sorry, we dont have seats for that many people..");
+        startProgram = false;
+    }
+    else
+    {
+        Console.Clear();
+        Console.WriteLine("Wrong input.. try again!");
     }
 }
+
+
 
