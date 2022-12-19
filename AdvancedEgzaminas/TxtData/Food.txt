@@ -1,1 +1,7 @@
-﻿
+﻿0 - Nothing || 0
+1 - Mac&Cheese || 4.99
+2 - Baked onion rings || 7.99
+3 - Medium cooked beef || 11.99
+4 - Half raw eggs with bread || 5.99
+5 - Gordon pizza || 15.99
+6 - Chicken nuggets w fries || 9.99

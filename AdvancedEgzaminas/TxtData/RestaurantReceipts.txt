@@ -1,4 +1,10 @@
 ﻿
 
+12/19/2022 6:27:17 PM
+Transaction id - 409227
+Table id - 1
+Customers name : zygis
+Half raw eggs with bread 5.99
+Fanta 1.99
 
 

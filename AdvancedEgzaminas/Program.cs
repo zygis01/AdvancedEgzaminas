@@ -3,21 +3,11 @@ using AdvancedEgzaminas.Repositories;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography.X509Certificates;
 
-// PADARYTI ASINCHRONINISKA PROGRAMA (KOL MAISTAS GAMINAMAS)
-// ISNAUDOTI PILNAI WAITRESS KLASE, PADARYTI PAKEITIMU 
-// PILNAI UZBAIGTI CEKIU SPAUSDINIMA
-// SUKRAUTI MAISTA IR GERIMUS I TXT FAILUS
-// PADARYTI UNIT TESTUS
-// JEIGU ISEINA PANAUDOTI GENERICS
-// PANAUDOTI LOADING BARA KOL SIUNCIAMAS EMAIL
-// PANAUDOTI DAUGIAU ADVANCED PASKAITU DALYKU
-// KUO LABIAU SUMAZINTI KODA / PERPANAUDOTI KLASES/FUNKCIJAS KUR GALIMA
-// 
-
-
+Restaurant restaurant = new();
 Waitress waitress = new();
 FoodRepository foodRepo = new();
 DrinksRepository drinksRepo = new();
+restaurant.FillTxtWithList();
 
 bool startProgram = true;
 
@@ -34,7 +24,7 @@ while (startProgram)
     {
         Console.WriteLine("Those are all of the tables that we have!");
         Console.WriteLine();
-        waitress.ShowAllTables();
+        waitress.ShowAllTables(startProgram);
 
         Console.WriteLine("Select the table you would like to take: ");
         bool isSuccessReadTableId = int.TryParse(Console.ReadLine(), out readTableId);
@@ -42,7 +32,16 @@ while (startProgram)
 
         if (isSuccessReadTableId == true)
         {
-            waitress.ReserveTable(readTableId, startProgram);
+            var table = restaurant.tables.Find(x => x.id == readTableId);
+            if (table.isEmpty == false)
+            {
+                Console.WriteLine("This table is already reserved.. Sorry!");
+                return;
+            }
+            else
+            {
+                waitress.ReserveTable(readTableId, startProgram);
+            }
         }
         else
         {
@@ -78,11 +77,20 @@ while (startProgram)
         Console.WriteLine("Whats your name Mr/Mis? ");
         string readName = Console.ReadLine();
 
-        var chosenFood = foodRepo.GetFoodById(foodOption);
-        var chosenDrink = drinksRepo.GetDrinkById(drinkOption);
+        try
+        {
+            var chosenFood = foodRepo.GetFoodById(foodOption);
+            var chosenDrink = drinksRepo.GetDrinkById(drinkOption);
 
-        waitress.RegisterOrder(readName, readTableId, chosenFood, chosenDrink);
-        waitress.SendReceiptToEmail(readTableId);
+            waitress.RegisterOrder(readName, readTableId, chosenFood, chosenDrink);
+            waitress.PrintReceipt(chosenDrink, chosenFood);
+            waitress.SendReceiptToEmail(readTableId);
+            return;
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine($"Something went wrong.. {ex.Message}");
+        }
     }
     else if (peopleCount < 1 || peopleCount > 4)
     {

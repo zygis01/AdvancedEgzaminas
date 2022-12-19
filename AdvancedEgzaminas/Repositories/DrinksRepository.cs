@@ -9,6 +9,7 @@ namespace AdvancedEgzaminas.Repositories
 {
     public class DrinksRepository
     {
+
         List<Drink> drinksMeniu = new();
 
         public DrinksRepository()
@@ -42,5 +43,6 @@ namespace AdvancedEgzaminas.Repositories
             }
             return tempRepository;
         }
+        
     }
 }

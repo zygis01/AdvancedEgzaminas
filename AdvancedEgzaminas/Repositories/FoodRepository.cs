@@ -13,13 +13,20 @@ namespace AdvancedEgzaminas.Repositories
 
         public FoodRepository()
         {
-            foodMeniu.Add(new Food(0, "Nothing", 0.00));
-            foodMeniu.Add(new Food(1, "Mac&Cheese", 4.99));
-            foodMeniu.Add(new Food(2, "Baked onion rings", 7.99));
-            foodMeniu.Add(new Food(3, "Medium cooked beef", 11.99));
-            foodMeniu.Add(new Food(4, "Half raw eggs with bread", 5.99));
-            foodMeniu.Add(new Food(5, "Gordon pizza", 15.99));
-            foodMeniu.Add(new Food(6, "Chicken nuggets w fries", 9.99));
+            try
+            {
+                foodMeniu.Add(new Food(0, "Nothing", 0.00));
+                foodMeniu.Add(new Food(1, "Mac&Cheese", 4.99));
+                foodMeniu.Add(new Food(2, "Baked onion rings", 7.99));
+                foodMeniu.Add(new Food(3, "Medium cooked beef", 11.99));
+                foodMeniu.Add(new Food(4, "Half raw eggs with bread", 5.99));
+                foodMeniu.Add(new Food(5, "Gordon pizza", 15.99));
+                foodMeniu.Add(new Food(6, "Chicken nuggets w fries", 9.99));
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"Error happened.. {ex.Message}");
+            }
         }
         internal List<Food> GetFoodMeniu()
         {
